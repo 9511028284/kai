@@ -23,8 +23,27 @@ import type {
 } from "./kai/types";
 import { getWebRetrieval } from "./kai/utils";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const PRODUCTION_API_URL =
+  "https://roy-comparison-assignment-tower.trycloudflare.com";
+
+function getApiUrl() {
+  const configuredUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  if (configuredUrl) {
+    return configuredUrl.trim().replace(/\/$/, "");
+  }
+
+  if (
+    typeof window !== "undefined" &&
+    !["localhost", "127.0.0.1"].includes(window.location.hostname)
+  ) {
+    return PRODUCTION_API_URL;
+  }
+
+  return "http://localhost:8000";
+}
+
+const API_URL = getApiUrl();
 
 export default function Home() {
   const supabase = createClient();
