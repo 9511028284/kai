@@ -15,6 +15,7 @@ import {
   Sparkles,
   Trash2,
   Volume2,
+  X,
 } from "lucide-react";
 import type {
   BackendStatus,
@@ -28,6 +29,7 @@ import { cn, formatTime, truncateText } from "./utils";
 
 type SidebarProps = {
   isOpen: boolean;
+  isMobileOpen: boolean;
   backendStatus: BackendStatus;
   isVoiceConversation: boolean;
   activeTab: SidebarTab;
@@ -48,10 +50,12 @@ type SidebarProps = {
   onSpeakLastReply: () => void;
   onClearScreen: () => void;
   onLogout: () => void;
+  onCloseMobile: () => void;
 };
 
 export function Sidebar({
   isOpen,
+  isMobileOpen,
   backendStatus,
   isVoiceConversation,
   activeTab,
@@ -72,17 +76,18 @@ export function Sidebar({
   onSpeakLastReply,
   onClearScreen,
   onLogout,
+  onCloseMobile,
 }: SidebarProps) {
   const webProvider = systemStatus?.web?.provider || "auto";
 
-  return (
-    <aside
-      className={cn(
-        "hidden border-r border-stone-800 bg-[#121412] text-white transition-all duration-300 md:flex md:flex-col",
-        isOpen ? "md:w-80" : "md:w-0 md:overflow-hidden"
-      )}
-    >
-      <div className="flex h-full min-w-80 flex-col">
+  function runAndClose(action: () => void) {
+    action();
+    onCloseMobile();
+  }
+
+  function renderSidebarContent(isMobile = false) {
+    return (
+      <div className="flex h-full min-w-0 flex-col">
         <div className="border-b border-white/10 p-4">
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -119,11 +124,22 @@ export function Sidebar({
             >
               <RefreshCw className="h-4 w-4" />
             </button>
+
+            {isMobile && (
+              <button
+                type="button"
+                onClick={onCloseMobile}
+                className="rounded-lg p-2 text-stone-400 transition hover:bg-white/10 hover:text-white"
+                title="Close menu"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
           </div>
 
           <button
             type="button"
-            onClick={onNewChat}
+            onClick={() => runAndClose(onNewChat)}
             className="mb-2 flex w-full items-center gap-3 rounded-lg border border-white/10 px-3 py-3 text-sm text-stone-100 transition hover:bg-white/10"
           >
             <Plus className="h-4 w-4" />
@@ -134,8 +150,8 @@ export function Sidebar({
             type="button"
             onClick={
               isVoiceConversation
-                ? onStopVoiceConversation
-                : onStartVoiceConversation
+                ? () => runAndClose(onStopVoiceConversation)
+                : () => runAndClose(onStartVoiceConversation)
             }
             className={cn(
               "flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition",
@@ -205,7 +221,7 @@ export function Sidebar({
                   <button
                     key={`${item.index}-${item.content}`}
                     type="button"
-                    onClick={() => onUseHistoryPrompt(item.content)}
+                    onClick={() => runAndClose(() => onUseHistoryPrompt(item.content))}
                     className="w-full rounded-lg px-3 py-2 text-left transition hover:bg-white/10"
                   >
                     <div className="mb-1 flex items-center gap-2 text-xs text-stone-500">
@@ -323,7 +339,7 @@ export function Sidebar({
         <div className="space-y-2 border-t border-white/10 p-3">
           <button
             type="button"
-            onClick={onSpeakLastReply}
+            onClick={() => runAndClose(onSpeakLastReply)}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-stone-300 transition hover:bg-white/10 hover:text-white"
           >
             <Volume2 className="h-4 w-4" />
@@ -332,7 +348,7 @@ export function Sidebar({
 
           <button
             type="button"
-            onClick={onClearScreen}
+            onClick={() => runAndClose(onClearScreen)}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-stone-300 transition hover:bg-white/10 hover:text-white"
           >
             <Trash2 className="h-4 w-4" />
@@ -341,7 +357,7 @@ export function Sidebar({
 
           <button
             type="button"
-            onClick={onLogout}
+            onClick={() => runAndClose(onLogout)}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-red-300 transition hover:bg-red-400/10"
           >
             <LogOut className="h-4 w-4" />
@@ -349,6 +365,38 @@ export function Sidebar({
           </button>
         </div>
       </div>
-    </aside>
+    );
+  }
+
+  return (
+    <>
+      <div
+        className={cn(
+          "fixed inset-0 z-50 bg-stone-950/55 backdrop-blur-sm transition md:hidden",
+          isMobileOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
+        )}
+        onClick={onCloseMobile}
+      />
+
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 w-[min(22rem,calc(100vw-1rem))] border-r border-stone-800 bg-[#121412] text-white shadow-2xl transition-transform duration-300 md:hidden",
+          isMobileOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        {renderSidebarContent(true)}
+      </aside>
+
+      <aside
+        className={cn(
+          "hidden border-r border-stone-800 bg-[#121412] text-white transition-all duration-300 md:flex md:flex-col",
+          isOpen ? "md:w-80" : "md:w-0 md:overflow-hidden"
+        )}
+      >
+        <div className="h-full min-w-80">{renderSidebarContent()}</div>
+      </aside>
+    </>
   );
 }

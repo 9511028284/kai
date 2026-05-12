@@ -42,27 +42,27 @@ export function Composer({
   onSendMessage,
 }: ComposerProps) {
   return (
-    <div className="border-t border-stone-200 bg-white px-4 py-4">
+    <div className="border-t border-stone-200 bg-white px-3 py-3 sm:px-4 sm:py-4">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-stone-500">
-          <span className="flex items-center gap-1.5">
+        <div className="mb-2 flex gap-2 overflow-x-auto pb-0.5 text-xs text-stone-500 sm:flex-wrap sm:overflow-visible sm:pb-0">
+          <span className="flex shrink-0 items-center gap-1.5 rounded-md bg-stone-100 px-2 py-1 sm:bg-transparent sm:px-0 sm:py-0">
             <Radio className="h-3.5 w-3.5 text-emerald-600" />
             {assistantActivity}
           </span>
           <span className="hidden sm:inline">/</span>
-          <span className="flex items-center gap-1.5">
+          <span className="flex shrink-0 items-center gap-1.5 rounded-md bg-stone-100 px-2 py-1 sm:bg-transparent sm:px-0 sm:py-0">
             <Cpu className="h-3.5 w-3.5" />
             {modelName}
           </span>
           <span className="hidden sm:inline">/</span>
-          <span className="flex items-center gap-1.5">
+          <span className="flex shrink-0 items-center gap-1.5 rounded-md bg-stone-100 px-2 py-1 sm:bg-transparent sm:px-0 sm:py-0">
             <Globe2 className="h-3.5 w-3.5" />
             Web fallback {webProvider}
           </span>
           {lastSyncAt && (
             <>
               <span className="hidden sm:inline">/</span>
-              <span className="flex items-center gap-1.5">
+              <span className="flex shrink-0 items-center gap-1.5 rounded-md bg-stone-100 px-2 py-1 sm:bg-transparent sm:px-0 sm:py-0">
                 <Clock3 className="h-3.5 w-3.5" />
                 Synced {formatTime(lastSyncAt)}
               </span>
@@ -71,7 +71,7 @@ export function Composer({
         </div>
 
         {backendStatus === "offline" && (
-          <div className="mb-2 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+          <div className="mb-2 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs leading-5 text-red-700 sm:items-center">
             <AlertTriangle className="h-4 w-4" />
             Backend is offline. Start FastAPI on port 8000 to chat.
           </div>
@@ -112,7 +112,7 @@ export function Composer({
                   : "Message KAI, or ask it to search the web..."
               }
               rows={1}
-              className="max-h-40 min-h-12 flex-1 resize-none bg-transparent px-2 py-3 text-sm leading-6 text-stone-950 outline-none placeholder:text-stone-400"
+              className="max-h-36 min-h-11 flex-1 resize-none bg-transparent px-1 py-2.5 text-sm leading-6 text-stone-950 outline-none placeholder:text-stone-400 sm:max-h-40 sm:min-h-12 sm:px-2 sm:py-3"
             />
 
             <button
@@ -131,10 +131,13 @@ export function Composer({
           </div>
         </div>
 
-        <p className="mt-2 text-center text-xs text-stone-500">
+        <p className="mt-2 hidden text-center text-xs text-stone-500 sm:block">
           {isAdmin
             ? "Admin Jarvis mode. Web retrieval is read-only; Mac and destructive tools still require approval."
             : "Team GPT mode. Web retrieval is read-only and chat stays under your account."}
+        </p>
+        <p className="mt-2 text-center text-xs text-stone-500 sm:hidden">
+          {isAdmin ? "Jarvis mode. Web is read-only." : "GPT mode. Private chat."}
         </p>
       </div>
     </div>

@@ -12,10 +12,10 @@ export function VoiceConversationPanel({
   onStop,
 }: VoiceConversationPanelProps) {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
+    <div className="flex flex-1 flex-col items-center justify-center px-4 text-center sm:px-6">
       <div
         className={cn(
-          "mb-6 flex h-40 w-40 items-center justify-center rounded-full border-4 bg-white shadow-xl",
+          "mb-5 flex h-32 w-32 items-center justify-center rounded-full border-4 bg-white shadow-xl sm:mb-6 sm:h-40 sm:w-40",
           voiceStatus === "listening" && "border-emerald-400",
           voiceStatus === "thinking" && "border-amber-400",
           voiceStatus === "speaking" && "border-cyan-400",
@@ -23,17 +23,17 @@ export function VoiceConversationPanel({
         )}
       >
         {voiceStatus === "listening" ? (
-          <Mic className="h-16 w-16 text-emerald-500" />
+          <Mic className="h-12 w-12 text-emerald-500 sm:h-16 sm:w-16" />
         ) : voiceStatus === "thinking" ? (
-          <Loader2 className="h-16 w-16 animate-spin text-amber-500" />
+          <Loader2 className="h-12 w-12 animate-spin text-amber-500 sm:h-16 sm:w-16" />
         ) : voiceStatus === "speaking" ? (
-          <Volume2 className="h-16 w-16 text-cyan-500" />
+          <Volume2 className="h-12 w-12 text-cyan-500 sm:h-16 sm:w-16" />
         ) : (
-          <Headphones className="h-16 w-16 text-stone-500" />
+          <Headphones className="h-12 w-12 text-stone-500 sm:h-16 sm:w-16" />
         )}
       </div>
 
-      <h2 className="mb-2 text-3xl font-semibold">
+      <h2 className="mb-2 text-2xl font-semibold sm:text-3xl">
         {voiceStatus === "listening"
           ? "Listening..."
           : voiceStatus === "thinking"
@@ -51,7 +51,7 @@ export function VoiceConversationPanel({
       <button
         type="button"
         onClick={onStop}
-        className="mt-8 rounded-lg bg-red-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-red-600"
+        className="mt-6 rounded-lg bg-red-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-600 sm:mt-8 sm:px-6"
       >
         Stop voice conversation
       </button>

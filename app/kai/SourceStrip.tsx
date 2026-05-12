@@ -15,7 +15,7 @@ export function SourceStrip({ toolResult }: SourceStripProps) {
   }
 
   return (
-    <div className="mt-3 border-l-2 border-emerald-400 bg-emerald-50 px-3 py-2 text-xs text-stone-700">
+    <div className="mt-3 overflow-hidden border-l-2 border-emerald-400 bg-emerald-50 px-3 py-2 text-xs text-stone-700">
       <div className="mb-2 flex flex-wrap items-center gap-2 font-medium text-emerald-800">
         <Globe2 className="h-3.5 w-3.5" />
         <span>Web fallback</span>
@@ -41,11 +41,11 @@ export function SourceStrip({ toolResult }: SourceStripProps) {
               rel="noreferrer"
               className="block rounded-lg border border-emerald-100 bg-white px-3 py-2 transition hover:border-emerald-300"
             >
-              <div className="font-medium text-stone-900">
+              <div className="break-words font-medium text-stone-900">
                 {truncateText(source.title || source.url || "Source", 72)}
               </div>
               {source.snippet && (
-                <p className="mt-1 leading-5 text-stone-500">
+                <p className="mt-1 break-words leading-5 text-stone-500">
                   {truncateText(source.snippet, 150)}
                 </p>
               )}

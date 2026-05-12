@@ -51,6 +51,7 @@ export default function Home() {
   const [isVoiceConversation, setIsVoiceConversation] = useState(false);
   const [voiceStatus, setVoiceStatus] = useState<VoiceStatus>("idle");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [activeSidebarTab, setActiveSidebarTab] =
     useState<SidebarTab>("history");
   const [backendStatus, setBackendStatus] =
@@ -679,9 +680,10 @@ export default function Home() {
   }
 
   return (
-    <main className="flex h-screen overflow-hidden bg-[#f4f1ec] text-stone-950">
+    <main className="flex h-screen h-dvh overflow-hidden bg-[#f4f1ec] text-stone-950">
       <Sidebar
         isOpen={sidebarOpen}
+        isMobileOpen={mobileSidebarOpen}
         backendStatus={backendStatus}
         isVoiceConversation={isVoiceConversation}
         activeTab={activeSidebarTab}
@@ -702,6 +704,7 @@ export default function Home() {
         onSpeakLastReply={speakLastAssistantMessage}
         onClearScreen={clearChatOnScreen}
         onLogout={logout}
+        onCloseMobile={() => setMobileSidebarOpen(false)}
       />
 
       <section className="flex min-w-0 flex-1 flex-col">
@@ -710,7 +713,10 @@ export default function Home() {
           isAdmin={isAdmin}
           email={profile?.email || session.user.email}
           webProvider={webProvider}
-          onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
+          onToggleSidebar={() => {
+            setSidebarOpen((prev) => !prev);
+            setMobileSidebarOpen(true);
+          }}
           onRefreshStatus={checkBackend}
         />
 
@@ -721,7 +727,7 @@ export default function Home() {
           />
         ) : (
           <div className="min-h-0 flex-1 overflow-y-auto">
-            <div className="mx-auto flex min-h-full w-full max-w-4xl flex-col px-4">
+            <div className="mx-auto flex min-h-full w-full max-w-4xl flex-col px-3 sm:px-4">
               {messages.length <= 1 ? (
                 <EmptyChatState
                   isAdmin={isAdmin}

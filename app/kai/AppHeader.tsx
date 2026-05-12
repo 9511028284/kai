@@ -20,8 +20,8 @@ export function AppHeader({
   onRefreshStatus,
 }: AppHeaderProps) {
   return (
-    <header className="flex h-16 items-center justify-between border-b border-stone-200 bg-white/95 px-4 backdrop-blur">
-      <div className="flex min-w-0 items-center gap-3">
+    <header className="flex min-h-16 flex-col gap-2 border-b border-stone-200 bg-white/95 px-3 py-2 backdrop-blur sm:h-16 sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-0">
+      <div className="flex min-w-0 items-center gap-2 sm:gap-3">
         <button
           type="button"
           onClick={onToggleSidebar}
@@ -40,14 +40,16 @@ export function AppHeader({
               TeenVerseHub context
             </span>
           </div>
-          <p className="truncate text-xs text-stone-500">{email}</p>
+          <p className="max-w-[14rem] truncate text-xs text-stone-500 sm:max-w-none">
+            {email}
+          </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 overflow-x-auto pb-0.5 sm:overflow-visible sm:pb-0">
         <div
           className={cn(
-            "hidden items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs sm:flex",
+            "flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs sm:px-3",
             getStatusClasses(backendStatus)
           )}
         >
@@ -61,7 +63,7 @@ export function AppHeader({
           Backend {backendStatus}
         </div>
 
-        <div className="hidden items-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs text-cyan-700 lg:flex">
+        <div className="flex shrink-0 items-center gap-1.5 rounded-lg border border-cyan-200 bg-cyan-50 px-2.5 py-1.5 text-xs text-cyan-700 sm:px-3">
           <Globe2 className="h-3.5 w-3.5" />
           Web {webProvider}
         </div>
@@ -69,7 +71,7 @@ export function AppHeader({
         <button
           type="button"
           onClick={onRefreshStatus}
-          className="rounded-lg border border-stone-200 bg-white p-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-950"
+          className="shrink-0 rounded-lg border border-stone-200 bg-white p-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-950"
           title="Refresh status"
         >
           <RefreshCw className="h-4 w-4" />
